@@ -98,32 +98,45 @@ a {
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>[SCRIBD] Downloader</h1>
-    <input type="text" id="inputUrl" placeholder="Paste Scribd URL here" />
-    <button onclick="convertUrl()">Download</button>
+  <header>
+    <h1><span class="highlight">[SCRIBD]</span> DOWNLOADER</h1>
+  </header>
 
-    <div class="result-section" id="resultSection" style="display: none;">
-      <p>Your document is ready</p>
+  <main>
+    <h2>What do you want to download from [SCRIBD]?</h2>
+
+    <div class="button-group">
+      <button class="type-btn">document</button>
+      <button class="type-btn">presentation</button>
+      <button class="type-btn">book</button>
+    </div>
+
+    <div class="input-section">
+      <input type="text" id="inputUrl" placeholder="paste the [scribd] link here" />
+      <button onclick="convertUrl()">DOWNLOAD</button>
+    </div>
+
+    <div class="result" id="resultSection" style="display:none;">
+      <h3>Your document is ready</h3>
       <p><span id="docTitle">title for document is here</span> | <a id="downloadLink" href="#" target="_blank">download</a></p>
     </div>
 
     <div class="recent-section" id="recentSection" style="display: none;">
-      <h3>recent documents downloaded</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>no</th>
-            <th>title</th>
-            <th>link</th>
-          </tr>
-        </thead>
-        <tbody id="recentTableBody">
-          <!-- JavaScript will insert recent rows -->
-        </tbody>
-      </table>
-    </div>
-  </div>
+  <h3>Recent Downloads</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>no</th>
+        <th>title</th>
+        <th>link</th>
+      </tr>
+    </thead>
+    <tbody id="recentTableBody">
+      <!-- JavaScript will insert recent rows -->
+    </tbody>
+  </table>
+</div>
+  </main>
 
   <script src="/script.js"></script>
 </body>
