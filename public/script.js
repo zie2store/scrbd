@@ -54,5 +54,12 @@ function updateRecentTable() {
 // ⏱ Show table on page load if data exists
 window.onload = () => {
     updateRecentTable();
+
+    document.getElementById('inputUrl').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            convertUrl();
+        }
+    });
 };
 
