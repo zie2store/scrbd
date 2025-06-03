@@ -53,13 +53,19 @@ function updateRecentTable() {
 
 // ⏱ Show table on page load if data exists
 window.onload = () => {
-    updateRecentTable();
+  updateRecentTable();
 
-    document.getElementById('inputUrl').addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            convertUrl();
-        }
+  document.getElementById('inputUrl').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      convertUrl();
+    }
+  });
+
+  // Accordion toggle
+  document.querySelectorAll('.accordion-header').forEach(button => {
+    button.addEventListener('click', () => {
+      button.classList.toggle('active');
     });
+  });
 };
-
