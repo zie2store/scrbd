@@ -6,13 +6,23 @@
   <title>[SCRBD] Downloader</title>
   <meta name="description" content="[SCRBD] Downloader helps you download document, pdf, and presentation from SCRIBD" />
   <style>
-    body {
+  
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+      
+ body {
   font-family: Arial, sans-serif;
   background: #ffffff;
   color: #4b00ff;
   text-align: center;
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 header {
@@ -26,12 +36,13 @@ header {
 }
 
 main {
+  flex: 1;
   max-width: 900px;
   width: 100%;
   margin: 0 auto;
-  padding: 0 15px; /* optional: add some spacing for smaller screens */
+  padding: 0 15px;
   box-sizing: border-box;
-}
+ }
 
 h2 {
   margin-bottom: 20px;
