@@ -1,1 +1,11 @@
+{
+  "name": "scrbd",
+  "version": "1.0.0",
+  "description": "Web-based Scribd downloader UI",
+  "scripts": {
+    "start": "echo 'Open index.html in browser'"
+  },
+  "author": "",
+  "license": "MIT"
+}
 
