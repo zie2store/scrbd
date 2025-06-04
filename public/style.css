@@ -205,15 +205,25 @@ iframe {
   border: none;
 }
 
-ul {
+    ul {
       list-style-type: none;
       padding-left: 0;
+      margin: 0;
+      display: inline-block; /* Center-align the list */
+      text-align: left; /* Left-align the list items */
     }
+
     li {
-      margin: 10px 0;
-        }
+      margin: 15px 0;
+    }
+
     a {
       text-decoration: none;
-      text-align: left;
       color: #007BFF;
+      font-size: 18px; /* Font size for the links */
+      font-weight: bold;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
