@@ -86,7 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const titleSuffix = ""; // You can set e.g., " | Scribd Viewer"
   const headingPrefix = "PDF ";
   const headingSuffix = ""; // You can set something if needed
-  // -------------------------------------
 
   // Extract 'doc' and title parameters from URL
   const urlParams = new URLSearchParams(window.location.search);
@@ -120,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
     iframe.setAttribute("data-aspect-ratio", "0.7080062794348508");
     iframe.setAttribute("scrolling", "no");
     iframe.setAttribute("width", "100%");
-    iframe.setAttribute("height", "700");
+    iframe.setAttribute("height", "1000");
     iframe.setAttribute("frameborder", "0");
 
     // Append iframe
