@@ -80,3 +80,52 @@ document.addEventListener("DOMContentLoaded", function () {
     .catch(error => console.error('Error loading footer:', error));
 });
 
+// belows are script for viewer.html
+  // --- Manual Prefix/Suffix Settings ---
+  const titlePrefix = "Download ";
+  const titleSuffix = ""; // You can set e.g., " | Scribd Viewer"
+  const headingPrefix = "PDF ";
+  const headingSuffix = ""; // You can set something if needed
+  // -------------------------------------
+
+  // Extract 'doc' and title parameters from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const docId = urlParams.get('doc');
+
+  // Extract the raw title after 'doc=' and '&'
+  const rawQuery = window.location.search;
+  const match = rawQuery.match(/doc=\d+&(.+)/);
+  const docRawTitle = match ? match[1] : '';
+
+  if (docId && docRawTitle) {
+    const formattedTitle = docRawTitle.replace(/-/g, ' ');
+
+    // Set the visible heading and page <title> with prefix/suffix
+    const finalHeading = `${headingPrefix}${formattedTitle}${headingSuffix}`;
+    const finalPageTitle = `${titlePrefix}${formattedTitle}${titleSuffix}`;
+
+    document.getElementById("docTitle").textContent = finalHeading;
+    document.title = finalPageTitle;
+
+    // Set download URL
+    const downloadUrl = `https://ilide.info/docgeneratev2?fileurl=https://scribd.vdownloaders.com/pdownload/${docId}/${docRawTitle}`;
+    document.getElementById("downloadLink").href = downloadUrl;
+
+    // Create iframe
+    const iframe = document.createElement("iframe");
+    iframe.className = "scribd_iframe_embed";
+    iframe.src = `https://www.scribd.com/embeds/${docId}/content?start_page=1&view_mode=scroll`;
+    iframe.setAttribute("tabindex", "0");
+    iframe.setAttribute("data-auto-height", "true");
+    iframe.setAttribute("data-aspect-ratio", "0.7080062794348508");
+    iframe.setAttribute("scrolling", "no");
+    iframe.setAttribute("width", "100%");
+    iframe.setAttribute("height", "600");
+    iframe.setAttribute("frameborder", "0");
+
+    // Append iframe
+    document.getElementById("viewer").appendChild(iframe);
+  } else {
+    document.getElementById("content").innerHTML = "<p style='color:red;'>Missing 'doc' or title parameter in the URL.</p>";
+  }
+
