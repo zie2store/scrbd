@@ -204,3 +204,16 @@ iframe {
   height: 600px;
   border: none;
 }
+
+ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+    li {
+      margin: 10px 0;
+      text-alignment: left;
+    }
+    a {
+      text-decoration: none;
+      color: #007BFF;
+    }
