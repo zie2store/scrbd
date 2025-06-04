@@ -2,7 +2,7 @@ let recentDocs = JSON.parse(localStorage.getItem('recentDocs')) || [];
 
 function convertUrl() {
     const inputUrl = document.getElementById('inputUrl').value.trim();
-    const baseUrl = 'https://scrbd.vercel.app/viewer.html?=';
+    const baseUrl = 'https://scrbd.vercel.app/viewer.html?doc=';
 
     const match = inputUrl.match(/\/(doc|document|presentation)\/(\d+)\/([\w-]+)/);
 
