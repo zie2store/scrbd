@@ -2,7 +2,7 @@ let recentDocs = JSON.parse(localStorage.getItem('recentDocs')) || [];
 
 function convertUrl() {
     const inputUrl = document.getElementById('inputUrl').value.trim();
-    const baseUrl = 'https://ilide.info/docgeneratev2?fileurl=https://scribd.vdownloaders.com/pdownload/';
+    const baseUrl = 'https://scrbd.vercel.app/viewer.html?=';
 
     const match = inputUrl.match(/\/(doc|document|presentation)\/(\d+)\/([\w-]+)/);
 
@@ -10,7 +10,7 @@ function convertUrl() {
         const [, type, id, slug] = match;
 
         const title = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-        const convertedUrl = `${baseUrl}${id}/${slug}`;
+        const convertedUrl = `${baseUrl}${id}&${slug}`;
 
         document.getElementById('docTitle').textContent = title;
         const link = document.getElementById('downloadLink');
