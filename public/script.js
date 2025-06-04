@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", function () {
     iframe.setAttribute("data-aspect-ratio", "0.7080062794348508");
     iframe.setAttribute("scrolling", "no");
     iframe.setAttribute("width", "100%");
-    iframe.setAttribute("height", "600");
+    iframe.setAttribute("height", "700");
     iframe.setAttribute("frameborder", "0");
 
     // Append iframe
