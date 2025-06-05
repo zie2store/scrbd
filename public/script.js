@@ -128,70 +128,49 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("content").innerHTML = "<p style='color:red;'>Missing 'doc' or title parameter in the URL.</p>";
   }
 
-// SCRIPT TO SHOW RANDOM LINKS
-    // URL of the document.txt
-    const documentUrl = 'https://raw.githubusercontent.com/zie2store/scrbd/refs/heads/main/public/document.txt';
 
-    // Function to fetch the document and extract links
-    async function fetchLinks() {
-      try {
-        // Fetch the document.txt file
-        const response = await fetch(documentUrl);
-        const text = await response.text();
 
-        // Use a regex to match URLs from the document
-        const linkPattern = /https?:\/\/\S+/g;
-        const links = text.match(linkPattern);
+const documentUrl = 'https://raw.githubusercontent.com/zie2store/scrbd/refs/heads/main/public/document.txt';
 
-        if (links) {
-          // Display random 10 links from the fetched data
-          displayLinks(getRandomLinks(links, 10));
-        } else {
-          alert('No links found in the document.');
-        }
-      } catch (error) {
-        console.error('Error fetching the document:', error);
-      }
-    }
+const pageTitle = document.title.toLowerCase().split(/\W+/).filter(word => word.length > 2);
 
-    // Function to get 10 random links from the list
-    function getRandomLinks(links, count) {
-      let randomLinks = [];
-      while (randomLinks.length < count) {
-        const randomIndex = Math.floor(Math.random() * links.length);
-        const link = links[randomIndex];
-        if (!randomLinks.includes(link)) {
-          randomLinks.push(link);
-        }
-      }
-      return randomLinks;
-    }
+// Fetch and filter links based on title similarity
+async function fetchLinks() {
+  try {
+    const response = await fetch(documentUrl);
+    const text = await response.text();
 
-    // Function to extract and clean the title from the URL
-    function extractTitle(url) {
-      const urlParts = url.split('&');
-      if (urlParts.length > 1) {
-        // Extract the title part after the '&'
-        const title = urlParts[1];
-        // Clean the title by replacing hyphens and decoding URL-encoded characters
-        return decodeURIComponent(title.replace(/-/g, ' ').replace(/%20/g, ' '));
-      }
-      return url; // If no '&' symbol found, return the full URL
-    }
+    const linkPattern = /https?:\/\/\S+/g;
+    const links = text.match(linkPattern);
 
-    // Function to display the random links on the webpage
-    function displayLinks(randomLinks) {
-      const linkList = document.getElementById('link-list');
-      randomLinks.forEach(link => {
-        const listItem = document.createElement('li');
-        const cleanTitle = extractTitle(link); // Get clean title
-        const anchorTag = document.createElement('a');
-        anchorTag.href = link;
-        anchorTag.textContent = cleanTitle;
-        listItem.appendChild(anchorTag);
-        linkList.appendChild(listItem);
+    if (links) {
+      const relatedLinks = links.filter(link => {
+        const decodedLink = decodeURIComponent(link.toLowerCase());
+        return pageTitle.some(word => decodedLink.includes(word));
       });
-    }
 
-    // Call the function to fetch and display the links
-    fetchLinks();
+      displayLinks(relatedLinks.slice(0, 10)); // show up to 10 related links
+    } else {
+      alert('No links found in the document.');
+    }
+  } catch (error) {
+    console.error('Error fetching the document:', error);
+  }
+}
+
+// Display links on the page
+function displayLinks(links) {
+  const list = document.getElementById('link-list');
+  links.forEach(link => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = link;
+    a.textContent = link;
+    a.target = '_blank';
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+}
+
+// Call the function on page load
+fetchLinks();
