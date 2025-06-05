@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Document Search</title>
   <style>
     body {
@@ -36,29 +36,48 @@
 <body>
 
   <h2>Search Documents</h2>
-  <input type="text" id="searchInput" placeholder="Type to search...">
+  <input type="text" id="searchInput" placeholder="Type to search..." />
   <ul id="results"></ul>
 
   <script>
     let documents = [];
 
-    // Fetch and parse the document text
+    // Try fetching the live file, if it fails, use sample data instead
     fetch('https://github.com/zie2store/scrbd/raw/refs/heads/main/public/document.txt')
-      .then(response => response.text())
+      .then(response => {
+        if (!response.ok) throw new Error('Network response not ok');
+        return response.text();
+      })
       .then(data => {
         documents = data.split('\n').map(url => {
           url = url.trim();
+          if (!url) return null;
           const parts = url.split('&');
           const rawTitle = parts[parts.length - 1] || '';
           const title = rawTitle.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
           return { title, url };
-        }).filter(doc => doc.title && doc.url);
+        }).filter(doc => doc);
       })
       .catch(error => {
-        console.error('Error fetching the document:', error);
+        console.warn('Failed to fetch live data, using sample data:', error);
+        // Sample fallback data for testing
+        documents = [
+          {
+            url: "https://scrbd.vercel.app/viewer.html?doc=311455689&Bahan-Soal-Ulangan-Color",
+            title: "Bahan Soal Ulangan Color"
+          },
+          {
+            url: "https://scrbd.vercel.app/viewer.html?doc=111122223&Contoh-LKS-Matematika-Kelas-5",
+            title: "Contoh LKS Matematika Kelas 5"
+          },
+          {
+            url: "https://scrbd.vercel.app/viewer.html?doc=123456789&Latihan-Soal-IPA-Kelas-6",
+            title: "Latihan Soal IPA Kelas 6"
+          }
+        ];
       });
 
-    // Search input event
+    // Search input event listener
     document.getElementById('searchInput').addEventListener('input', function () {
       const query = this.value.toLowerCase();
       const filtered = documents.filter(doc => doc.title.toLowerCase().includes(query));
@@ -67,8 +86,12 @@
 
     function displayResults(results) {
       const resultsContainer = document.getElementById('results');
+      if (results.length === 0) {
+        resultsContainer.innerHTML = '<li>No results found</li>';
+        return;
+      }
       resultsContainer.innerHTML = results.map(doc =>
-        `<li><a href="${doc.url}" target="_blank">${doc.title}</a></li>`
+        `<li><a href="${doc.url}" target="_blank" rel="noopener noreferrer">${doc.title}</a></li>`
       ).join('');
     }
   </script>
