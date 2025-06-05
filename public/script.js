@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Append iframe
     document.getElementById("viewer").appendChild(iframe);
   } else {
-    document.getElementById("content").innerHTML = "<p style='color:red;'>Missing 'doc' or title parameter in the URL. Click <a href="https://scrbd.vercel.app">HERE</a> to find SCRIBD Document!</p>";
+    document.getElementById("content").innerHTML = "<p style='color:red;'>Missing 'doc' or title parameter in the URL. Click <a href='https://scrbd.vercel.app'>HERE</a> to find SCRIBD Document!</p>";
   }
 
 
