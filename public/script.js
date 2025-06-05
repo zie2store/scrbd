@@ -129,12 +129,11 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-
+// SCRIPT TO SHOW RANDOM LINKS
+// URL of the document.txt
 const documentUrl = 'https://raw.githubusercontent.com/zie2store/scrbd/refs/heads/main/public/document.txt';
 
-const pageTitle = document.title.toLowerCase().split(/\W+/).filter(word => word.length > 2);
-
-// Fetch and filter links based on title similarity
+// Function to fetch the document and extract links with titles
 async function fetchLinks() {
   try {
     const response = await fetch(documentUrl);
@@ -143,13 +142,20 @@ async function fetchLinks() {
     const linkPattern = /https?:\/\/\S+/g;
     const links = text.match(linkPattern);
 
+    const lines = text.split('\n');
+
     if (links) {
-      const relatedLinks = links.filter(link => {
-        const decodedLink = decodeURIComponent(link.toLowerCase());
-        return pageTitle.some(word => decodedLink.includes(word));
+      // Get unique links and match titles
+      const linkTitlePairs = links.map(link => {
+        const title = findRelatedTitle(link, lines);
+        return { link, title };
       });
 
-      displayLinks(relatedLinks.slice(0, 10)); // show up to 10 related links
+      // Filter out entries without related titles
+      const validPairs = linkTitlePairs.filter(pair => pair.title);
+
+      // Display 10 random valid link-title pairs
+      displayLinks(getRandomLinks(validPairs, 10));
     } else {
       alert('No links found in the document.');
     }
@@ -158,19 +164,42 @@ async function fetchLinks() {
   }
 }
 
-// Display links on the page
-function displayLinks(links) {
-  const list = document.getElementById('link-list');
-  links.forEach(link => {
-    const li = document.createElement('li');
-    const a = document.createElement('a');
-    a.href = link;
-    a.textContent = link;
-    a.target = '_blank';
-    li.appendChild(a);
-    list.appendChild(li);
+// Function to get 10 random items from an array
+function getRandomLinks(items, count) {
+  const shuffled = items.sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+}
+
+// Function to extract a keyword from the URL and find a related title in text lines
+function findRelatedTitle(url, lines) {
+  const queryPart = url.split('?')[1] || url.split('/').pop();
+  const keywords = queryPart
+    .split(/[-&=_]/)
+    .map(word => word.toLowerCase())
+    .filter(word => word.length > 2); // Skip short/irrelevant words
+
+  // Search for lines with matching words
+  for (let line of lines) {
+    const lowerLine = line.toLowerCase();
+    if (keywords.some(word => lowerLine.includes(word)) && !line.includes('http')) {
+      return line.trim();
+    }
+  }
+  return null;
+}
+
+// Function to display the links with titles
+function displayLinks(pairs) {
+  const linkList = document.getElementById('link-list');
+  linkList.innerHTML = ''; // Clear previous content
+  pairs.forEach(({ link, title }) => {
+    const listItem = document.createElement('li');
+    const anchorTag = document.createElement('a');
+    anchorTag.href = link;
+    anchorTag.textContent = title;
+    listItem.appendChild(anchorTag);
+    linkList.appendChild(listItem);
   });
 }
 
-// Call the function on page load
 fetchLinks();
