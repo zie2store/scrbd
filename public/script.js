@@ -82,8 +82,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // belows are script for viewer.html
   // --- Manual Prefix/Suffix Settings ---
-  const titlePrefix = "Download ";
-  const titleSuffix = ""; // You can set e.g., " | Scribd Viewer"
+  const titlePrefix = "[PDF] Download ";
+  const titleSuffix = " | SCRIBD DOWNLADER"; // You can set e.g., " | Scribd Viewer"
   const headingPrefix = "PDF ";
   const headingSuffix = ""; // You can set something if needed
 
@@ -125,12 +125,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // Append iframe
     document.getElementById("viewer").appendChild(iframe);
   } else {
-    document.getElementById("content").innerHTML = "<p style='color:red;'>Missing 'doc' or title parameter in the URL.</p>";
+    document.getElementById("content").innerHTML = "<p style='color:red;'>Missing 'doc' or title parameter in the URL. Click <a href="https://scrbd.vercel.app">HERE</a> to find SCRIBD Document!</p>";
   }
 
 
-// SCRIPT TO SHOW RANDOM LINKS
-// URL of the document.txt
 // SCRIPT TO SHOW RANDOM LINKS
 // URL of the document.txt
 const documentUrl = 'https://raw.githubusercontent.com/zie2store/scrbd/refs/heads/main/public/document.txt';
