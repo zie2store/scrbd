@@ -7,23 +7,26 @@
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
+      max-width: 600px;
+      margin: auto;
     }
     input {
       width: 100%;
       padding: 10px;
       font-size: 16px;
+      margin-bottom: 15px;
     }
     ul {
       list-style: none;
       padding: 0;
-      margin-top: 10px;
     }
     li {
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     a {
       text-decoration: none;
       color: #007bff;
+      font-weight: bold;
     }
     a:hover {
       text-decoration: underline;
@@ -43,10 +46,13 @@
     fetch('https://github.com/zie2store/scrbd/raw/refs/heads/main/public/document.txt')
       .then(response => response.text())
       .then(data => {
-        documents = data.split('\n').map(line => {
-          const [title, url] = line.split('&');
-          return { title: title?.trim(), url: url?.trim() };
-        }).filter(doc => doc.title && doc.url); // Clean invalid entries
+        documents = data.split('\n').map(url => {
+          url = url.trim();
+          const parts = url.split('&');
+          const rawTitle = parts[parts.length - 1] || '';
+          const title = rawTitle.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+          return { title, url };
+        }).filter(doc => doc.title && doc.url);
       })
       .catch(error => {
         console.error('Error fetching the document:', error);
@@ -61,7 +67,7 @@
 
     function displayResults(results) {
       const resultsContainer = document.getElementById('results');
-      resultsContainer.innerHTML = results.map(doc => 
+      resultsContainer.innerHTML = results.map(doc =>
         `<li><a href="${doc.url}" target="_blank">${doc.title}</a></li>`
       ).join('');
     }
