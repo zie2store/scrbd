@@ -131,75 +131,70 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // SCRIPT TO SHOW RANDOM LINKS
 // URL of the document.txt
+// SCRIPT TO SHOW RANDOM LINKS
+// URL of the document.txt
 const documentUrl = 'https://raw.githubusercontent.com/zie2store/scrbd/refs/heads/main/public/document.txt';
 
-// Function to fetch the document and extract links with titles
+// Function to fetch the document and extract links
 async function fetchLinks() {
-  try {
-    const response = await fetch(documentUrl);
-    const text = await response.text();
+try {
+// Fetch the document.txt file
+const response = await fetch(documentUrl);
+const text = await response.text();
 
-    const linkPattern = /https?:\/\/\S+/g;
-    const links = text.match(linkPattern);
+// Use a regex to match URLs from the document
+const linkPattern = /https?:\/\/\S+/g;
+const links = text.match(linkPattern);
 
-    const lines = text.split('\n');
-
-    if (links) {
-      // Get unique links and match titles
-      const linkTitlePairs = links.map(link => {
-        const title = findRelatedTitle(link, lines);
-        return { link, title };
-      });
-
-      // Filter out entries without related titles
-      const validPairs = linkTitlePairs.filter(pair => pair.title);
-
-      // Display 10 random valid link-title pairs
-      displayLinks(getRandomLinks(validPairs, 10));
-    } else {
-      alert('No links found in the document.');
-    }
-  } catch (error) {
-    console.error('Error fetching the document:', error);
-  }
+if (links) {
+// Display random 10 links from the fetched data
+displayLinks(getRandomLinks(links, 10));
+} else {
+alert('No links found in the document.');
+}
+} catch (error) {
+console.error('Error fetching the document:', error);
+}
 }
 
-// Function to get 10 random items from an array
-function getRandomLinks(items, count) {
-  const shuffled = items.sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
+// Function to get 10 random links from the list
+function getRandomLinks(links, count) {
+let randomLinks = [];
+while (randomLinks.length < count) {
+const randomIndex = Math.floor(Math.random() * links.length);
+const link = links[randomIndex];
+if (!randomLinks.includes(link)) {
+randomLinks.push(link);
+}
+}
+return randomLinks;
 }
 
-// Function to extract a keyword from the URL and find a related title in text lines
-function findRelatedTitle(url, lines) {
-  const queryPart = url.split('?')[1] || url.split('/').pop();
-  const keywords = queryPart
-    .split(/[-&=_]/)
-    .map(word => word.toLowerCase())
-    .filter(word => word.length > 2); // Skip short/irrelevant words
-
-  // Search for lines with matching words
-  for (let line of lines) {
-    const lowerLine = line.toLowerCase();
-    if (keywords.some(word => lowerLine.includes(word)) && !line.includes('http')) {
-      return line.trim();
-    }
-  }
-  return null;
+// Function to extract and clean the title from the URL
+function extractTitle(url) {
+const urlParts = url.split('&');
+if (urlParts.length > 1) {
+// Extract the title part after the '&'
+const title = urlParts[1];
+// Clean the title by replacing hyphens and decoding URL-encoded characters
+return decodeURIComponent(title.replace(/-/g, ' ').replace(/%20/g, ' '));
+}
+return url; // If no '&' symbol found, return the full URL
 }
 
-// Function to display the links with titles
-function displayLinks(pairs) {
-  const linkList = document.getElementById('link-list');
-  linkList.innerHTML = ''; // Clear previous content
-  pairs.forEach(({ link, title }) => {
-    const listItem = document.createElement('li');
-    const anchorTag = document.createElement('a');
-    anchorTag.href = link;
-    anchorTag.textContent = title;
-    listItem.appendChild(anchorTag);
-    linkList.appendChild(listItem);
-  });
+// Function to display the random links on the webpage
+function displayLinks(randomLinks) {
+const linkList = document.getElementById('link-list');
+randomLinks.forEach(link => {
+const listItem = document.createElement('li');
+const cleanTitle = extractTitle(link); // Get clean title
+const anchorTag = document.createElement('a');
+anchorTag.href = link;
+anchorTag.textContent = cleanTitle;
+listItem.appendChild(anchorTag);
+linkList.appendChild(listItem);
+});
 }
 
+// Call the function to fetch and display the links
 fetchLinks();
