@@ -1,2 +1,2 @@
-# scrbd
-[scribd] document downloader
+# SCBD
+[SCBD] document downloader
