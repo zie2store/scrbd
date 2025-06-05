@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    a {
+      text-decoration: none;
+      color: #007bff;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Search Documents</h2>
+  <input type="text" id="searchInput" placeholder="Type to search...">
+  <ul id="results"></ul>
+
+  <script>
+    let documents = [];
+
+    // Fetch and parse the document text
+    fetch('https://github.com/zie2store/scrbd/raw/refs/heads/main/public/document.txt')
+      .then(response => response.text())
+      .then(data => {
+        documents = data.split('\n').map(line => {
+          const [title, url] = line.split('&');
+          return { title: title?.trim(), url: url?.trim() };
+        }).filter(doc => doc.title && doc.url); // Clean invalid entries
+      })
+      .catch(error => {
+        console.error('Error fetching the document:', error);
+      });
+
+    // Search input event
+    document.getElementById('searchInput').addEventListener('input', function () {
+      const query = this.value.toLowerCase();
+      const filtered = documents.filter(doc => doc.title.toLowerCase().includes(query));
+      displayResults(filtered.slice(0, 5));
+    });
+
+    function displayResults(results) {
+      const resultsContainer = document.getElementById('results');
+      resultsContainer.innerHTML = results.map(doc => 
+        `<li><a href="${doc.url}" target="_blank">${doc.title}</a></li>`
+      ).join('');
+    }
+  </script>
+
+</body>
+</html>
